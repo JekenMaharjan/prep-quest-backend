@@ -18,11 +18,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Enable CORS for React frontend
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
@@ -41,7 +42,7 @@ app.Urls.Add($"http://*:{port}");
 
 app.UseHttpsRedirection();
 
-app.UseCors(); // Must be before MapControllers
+app.UseCors("AllowFrontend"); // Must be before MapControllers
 
 app.UseAuthorization();
 
