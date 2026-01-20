@@ -47,4 +47,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => "PrepQuest API is running");
+
 app.Run();
