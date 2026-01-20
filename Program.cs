@@ -18,18 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Enable CORS for React frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowVercel", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy
-            .WithOrigins(
-                "https://prep-quest-beta.vercel.app",
-                "http://localhost:3000"
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
-
 
 var app = builder.Build();
 
@@ -46,7 +41,7 @@ app.Urls.Add($"http://*:{port}");
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowVercel"); // Must be before MapControllers
+app.UseCors(); // Must be before MapControllers
 
 app.UseAuthorization();
 
