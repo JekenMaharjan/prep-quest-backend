@@ -18,12 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Enable CORS for React frontend
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowNextApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
@@ -36,12 +37,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-app.Urls.Add($"http://*:{port}");
+//var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+//app.Urls.Add($"http://*:{port}");
 
 app.UseHttpsRedirection();
 
-app.UseCors(); // Must be before MapControllers
+app.UseCors("AllowNextApp"); // Must be before MapControllers
 
 app.UseAuthorization();
 
